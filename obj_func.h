@@ -23,3 +23,19 @@
 	->Griewank Function
 	->Rastrigrin Function
 */
+
+
+/*
+Sphere Function
+Requires <vector> and C++11
+Compilation: g++ fileName.cpp -std=c++11 -o progName
+*/
+double pso_sphere (vector< vector< double > > swarm, void *advanced_settings) {
+	double result (0.);
+	for (auto particle : swarm) {
+		for (auto dim : particle) {
+			result += pow (dim, 2);
+		}
+	}
+	return (result);
+}
