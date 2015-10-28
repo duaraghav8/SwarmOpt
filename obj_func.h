@@ -16,12 +16,22 @@
  */
 
 /*
-   Implementation of built-in Objective Functions that the library provides.
+   Implementation of Objective Functions that the library provides.
    List of Functions the library provides / will provide support for:
 	->Sphere Function
 	->Rosenbrock Function
 	->Griewank Function
 	->Rastrigrin Function
+	
+   Function Format:
+   
+   double function_name (vector< vector< double > > swarm, void *advanced_settings) {
+   	/*IMPLEMENTATION
+   	swarm is the vector of vector of doubles. Each Vector inside the Swarm represents an N-Dimensional particle
+   	Number of Dimensions can easily be retrieved. For example:
+   		int dim = swarm [0].length ();
+   	Length of a particle vector is its dimension
+   }
 */
 
 
