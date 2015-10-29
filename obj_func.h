@@ -26,13 +26,13 @@
    Function Format:
    
    double function_name (vector< double > particle, void *advanced_settings) {
-   	/*IMPLEMENTATION
-   	particle is the vector of doubles. Each element in the vector represents the value of the particle in that dimension
-   	Number of Dimensions can easily be retrieved using the vector's size () function. For example:
-   		int dim = particle.size ();
-   	Size of a particle vector is its dimension
+   	//IMPLEMENTATION
+   	//particle is the vector of doubles. Each element in the vector represents the value of the particle in that dimension
+   	//Number of Dimensions can easily be retrieved using the vector's size () function. For example:
+   	//	int dim = particle.size ();
+   	//Size of a particle vector is its dimension
 
-	advanced_settings points to a set of settings the user might need in their objective function
+	//advanced settings points to a set of settings the user might need in their objective function
    }
 */
 
@@ -45,7 +45,7 @@ Compilation: g++ fileName.cpp -std=c++11 -o progName
 double pso_sphere (vector< double > particle, void *advanced_settings) {
 	double result (0.);
 	for (auto dim : particle) {
-		result += pow (dim, 2);
+		result += pow (dim, 2.);
 	}
 	return (result);
 }
@@ -57,7 +57,33 @@ Requires <vector>
 double pso_rosenbrock (vector< double > particle, void *advanced_settings) {
 	double result (0.);
 	for (int i = 0; i < particle.size () - 1; i++) {
-		result += 100 * pow (particle [i + 1] + pow (particle [i], 2), 2) + pow (particle [i] - 1, 2);
+		result += ( 100. * pow (particle [i + 1] + pow (particle [i], 2.), 2.) ) + pow (particle [i] - 1, 2.);
 	}
 	return (result);
+}
+
+/*
+Rastrigin Function
+Requires <vector>, <math.h> and C++11
+Compilation: g++ fileName.cpp -std=c++11 -o progName
+*/
+double pso_rastrigin (vector< double > particle, void *advanced_settings) {
+	double result (10. * static_cast< double > (particle.size ())), A (10.), PI (3.14159);
+	for (auto dim : particle) {
+		result += pow (dim, 2.) - (A * cos (2. * PI * dim));
+	}
+	return (result);
+}
+
+/*
+Griewank Function
+Requires <vector> and C++11
+*/
+double pso_griewank (vector< double > particle, void *advanced_settings) {
+	double sum (0.), product (1.);
+	for (int i = 0; i < particle.size (); i++) {
+		sum += pow (particle [i], 2.);
+		product *= cos (particle [i] / sqrt (i+1));
+	}
+	return (1. + (sum / 4000.) - product );
 }
