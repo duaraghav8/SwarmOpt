@@ -25,12 +25,14 @@
 	
    Function Format:
    
-   double function_name (vector< vector< double > > swarm, void *advanced_settings) {
+   double function_name (vector< double > particle, void *advanced_settings) {
    	/*IMPLEMENTATION
-   	swarm is the vector of vector of doubles. Each Vector inside the Swarm represents an N-Dimensional particle
-   	Number of Dimensions can easily be retrieved. For example:
-   		int dim = swarm [0].length ();
-   	Length of a particle vector is its dimension
+   	particle is the vector of doubles. Each element in the vector represents the value of the particle in that dimension
+   	Number of Dimensions can easily be retrieved using the vector's size () function. For example:
+   		int dim = particle.size ();
+   	Size of a particle vector is its dimension
+
+	advanced_settings points to a set of settings the user might need in their objective function
    }
 */
 
@@ -40,12 +42,22 @@ Sphere Function
 Requires <vector> and C++11
 Compilation: g++ fileName.cpp -std=c++11 -o progName
 */
-double pso_sphere (vector< vector< double > > swarm, void *advanced_settings) {
+double pso_sphere (vector< double > particle, void *advanced_settings) {
 	double result (0.);
-	for (auto particle : swarm) {
-		for (auto dim : particle) {
-			result += pow (dim, 2);
-		}
+	for (auto dim : particle) {
+		result += pow (dim, 2);
+	}
+	return (result);
+}
+
+/*
+Rosenbrock Function
+Requires <vector>
+*/
+double pso_rosenbrock (vector< double > particle, void *advanced_settings) {
+	double result (0.);
+	for (int i = 0; i < particle.size () - 1; i++) {
+		result += 100 * pow (particle [i + 1] + pow (particle [i], 2), 2) + pow (particle [i] - 1, 2);
 	}
 	return (result);
 }
