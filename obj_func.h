@@ -77,7 +77,7 @@ double pso_rastrigin (vector< double > particle, void *advanced_settings) {
 
 /*
 Griewank Function
-Requires <vector> and C++11
+Requires <vector>, <math.h> and C++11
 */
 double pso_griewank (vector< double > particle, void *advanced_settings) {
 	double sum (0.), product (1.);

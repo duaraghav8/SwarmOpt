@@ -36,7 +36,7 @@ SwarmOpt is a C++ Based Particle Swarm Optimization Library for optimizing conti
 
 	(Can be used individually as well as in combination with each-other)
 
-	->DEFAULT: Ftness Error < Specified Error (The user specifies an error (double) and when the fittest particle demonstrates an error smaller than that, process stops).
+	->DEFAULT: Fitness Error < Specified Error (The user specifies an error (double) and when the fittest particle demonstrates an error smaller than that, process stops).
 
 	->Limit on Iterations: The Process stops after I iterations (I (int) supplied by the user)
 
@@ -59,7 +59,7 @@ SwarmOpt is a C++ Based Particle Swarm Optimization Library for optimizing conti
 
 6. Verbose Information:
 
-	Returns the progress of all the particles in all the dimensions for each iteration as a vector of vector of strings ( std::vector< std::vector< std::string > > )
+	Return the state of the swarm after each iteration (for each iteration, a vector of vectors of double is produced). This is the 'snapshot' of the swarm after that iteration
 
 	default value: 0 (means verbose information output is OFF)
 

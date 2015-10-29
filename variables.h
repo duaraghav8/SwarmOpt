@@ -19,4 +19,53 @@
    Declaration & Description of Variables and structures used in the library
 */
 
-double error = DBL_MAX;
+namespace pso_config {
+	/*
+		Strategy constants for Social Factor Influence
+	*/
+	const unsigned int PSO_STRATEGY_GLOBAL (0);
+	const unsigned int PSO_STRATEGY_KNN (1);
+
+	/*
+		Constants for Inertia Weight Configuration 
+	*/
+	const double DEFAULT_W (0.6359);
+	const unsigned int STRATEGY_W_CONST (0);
+	const unsigned int STRATEGY_W_LIN_DEC (1);
+
+	/*
+		Constants for determining Halting Conditions - Can be used in combination with each-other using bitwise OR '|' operator
+		EXAMPLE: pso.halt_strategy = STRATEGY_FITNESS_THRESHOLD | STRATEGY_ITER_LIMIT;		
+		//loop breaks if error is small enough or N iterations have passed
+	*/
+	const double DEFAULT_ERR_THRESHOLD (1e-03);
+	const unsigned int DEFAULT_ITERATIONS (5000);
+	const unsigned int DEFAULT_NO_IMPROVE_ITER (7);
+
+	const unsigned int STRATEGY_FITNESS_THRESHOLD (1);
+	const unsigned int STRATEGY_ITER_LIMIT (2);
+	const unsigned int STRATEGY_NO_IMPROVE (3);
+
+	/*
+		Constants concerning the Swarm
+	*/
+	const unsigned int SWARM_SIZE_MAX (100);
+
+	/*
+		Constant concerning the Cognitive & Social Influence
+		C1 = C2 = C (defined below)
+	*/
+	const double C (1.496);
+
+	/*
+		Constants for Verbose Information
+	*/
+	const unsigned int VERBOSE_OFF (0);
+	const unsigned int VERBOSE_ON (1);
+
+	/*
+		Constants for Database Storage
+	*/
+	const unsigned int DB_STORE_OFF (0);
+	const unsigned int DB_STORE_ON (1);
+};
