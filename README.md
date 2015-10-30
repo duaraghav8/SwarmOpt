@@ -12,7 +12,7 @@
 	Mr. Gunjan Chhabra
 
 
-SwarmOpt is a C++ Based Particle Swarm Optimization Library for optimizing continuous single-objective functions. The library currently features 3 in-built objective functions (Sphere, Rosenbrock, Griewank). Though PSO can also be used for Discrete Optimization Problems, the current version of the library doesn't support it.
+SwarmOpt is a C++11 Based Particle Swarm Optimization Library for optimizing continuous single-objective functions. The library currently features 3 in-built objective functions (Sphere, Rosenbrock, Griewank). Though PSO can also be used for Discrete Optimization Problems, the current version of the library doesn't support it.
 
 
 **Features:**
@@ -45,7 +45,7 @@ SwarmOpt is a C++ Based Particle Swarm Optimization Library for optimizing conti
 
 4. Swarm Size:
 
-	A Maximum of 100 particles can be used (however, a size of 20 to 30 is recommend for most problems). The default swarm size is (12 * sqrt (dim), sqrt means Square Root, dim is the number of dimensions in each particle) particles.
+	A Maximum of 100 particles can be used (however, a size of 20 to 30 is recommend for most problems). The default swarm size is (10 + (2 * sqrt (dim)), sqrt means Square Root, dim is the number of dimensions in each particle) particles.
 
 	Custom Swarm Size: Swarm Size is set to S (S (int) supplied by the user. S <= 100)
 

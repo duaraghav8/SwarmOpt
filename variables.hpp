@@ -30,12 +30,12 @@
    Declaration & Description of Variables and structures used in the library
 */
 
-namespace pso_config {
+namespace pso {
 	/*
 		Strategy constants for Social Factor Influence
 	*/
-	const unsigned int PSO_STRATEGY_GLOBAL (0);
-	const unsigned int PSO_STRATEGY_KNN (1);
+	const unsigned int STRATEGY_GLOBAL (0);
+	const unsigned int STRATEGY_KNN (1);
 
 	/*
 		Constants for Inertia Weight Configuration 
@@ -49,6 +49,7 @@ namespace pso_config {
 		EXAMPLE: pso.halt_strategy = STRATEGY_FITNESS_THRESHOLD | STRATEGY_ITER_LIMIT;		
 		//loop breaks if error is small enough or N iterations have passed
 	*/
+	const double MAX_ERR = DBL_MAX;
 	const double DEFAULT_ERR_THRESHOLD (1e-03);
 	const unsigned int DEFAULT_ITERATIONS (5000);
 	const unsigned int DEFAULT_NO_IMPROVE_ITER (7);
