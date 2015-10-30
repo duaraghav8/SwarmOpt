@@ -22,6 +22,7 @@
 	->Rosenbrock Function
 	->Griewank Function
 	->Rastrigrin Function
+	->Styblinski-Tang Function
 	
    Function Format:
    
