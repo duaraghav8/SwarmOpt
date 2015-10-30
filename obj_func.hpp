@@ -97,3 +97,16 @@ double pso_griewank (std::vector< double > particle, void *advanced_settings) {
 	}
 	return (1. + (sum / 4000.) - product );
 }
+
+/*
+Styblinski-Tang Function
+Requires <vector>, <math> and C++11
+Compilation: g++ fileName.cpp -std=c++11 -o progName
+*/
+double pso_styb_tang (std::vector< double > particle, void *advanced_settings) {
+	double result (0.);
+	for (auto dim : particle) {
+		result += pow (dim, 4.0) - (16. * pow (dim, 2.)) + (5. * dim);
+	}
+	return (result / 2.);
+}
