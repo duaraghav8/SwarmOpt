@@ -65,6 +65,8 @@ SwarmOpt is a C++ Based Particle Swarm Optimization Library for optimizing conti
 
 	supply the function with any int other than 0 - Verbose ON
 
+	Prints Verbose Information to Standard Output.
+
 
 7. Output format:
 
