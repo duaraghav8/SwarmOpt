@@ -44,7 +44,6 @@
 #include <ctime>
 #include <cfloat>
 #include <cmath>
-#include "variables.hpp"
 
 #endif
 
