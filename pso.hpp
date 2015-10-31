@@ -28,27 +28,45 @@ class Swarm {
 		unsigned int iter, iter_max, no_improve, swarm_size, neighbours;
 
 		const unsigned int dim;
-		double inert_weight, err_threshold, c1, c2;
+		double inert_weight, err_threshold, c1, c2, x_hi, x_lo;
 		bool verbose, db_store;
 
-		/*Objective Function setting */
+		/* Objective Function setting */
 		double (*objective_func) (std::vector< double >, void*);
 
-		int calc_swarm_size (int dim) {
+		/* Functions for internal use */
+		double drand (double lo, double hi) const {
+			double result = static_cast< double > (rand ()) / RAND_MAX;
+			return (lo + (result * (hi - lo)));
+		}
+
+		int calc_swarm_size (int dim) const {
 			int result (10. + 2. * sqrt (dim));
 			return (result < pso::SWARM_SIZE_MAX ? result : pso::SWARM_SIZE_MAX);
 		}
 
 		std::vector< std::vector< double > > init_swarm (void) const {
-			/* logic for creating swarm with random values and returning */
-			std::vector< std::vector< double > > x (2);
-			return (x);
+			/* logic for creating and returning a swarm with random values */
+			std::vector< std::vector< double > > s (swarm_size);
+
+			for (int i = 0; i < swarm_size; i++) {
+				std::vector< double > particle (dim);
+				for (int j = 0; j < dim; j++) {
+					particle [j] = drand (x_lo, x_hi);
+				}
+				s [i] = particle;
+			}
+			return (s);
 		}
 
 		std::vector< std::vector< double > > init_velocity (void) const {
-			/* logic for creating velocity vectors */
-			std::vector< std::vector< double > > x (2);
-			return (x);
+			/* logic for creating velocity vectors - initial velocity = 0.0 */
+			std::vector< std::vector< double > > v (swarm_size);
+			for (int i = 0; i < swarm_size; i++) {
+				std::vector< double > particle (dim, 0.);
+				v [i] = particle;
+			}
+			return (v);
 		}
 
 		void update_inert_weight (double& inert_weight) {
@@ -57,7 +75,7 @@ class Swarm {
 			}
 		}
 
-		void get_gbest (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
+		void update_gbest (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
 			switch (strategy_social) {
 				case (pso::STRATEGY_GLOBAL):
 					/* logic for Global influnce */
@@ -67,12 +85,16 @@ class Swarm {
 					break;
 			}
 		}
+		/* Functions for internal use END */
 
 	public:
 		/* The Class has only one constructor. Supplying the object with dimension and objective function is necessary, rest can be initialized to default values. Dimension supplied cannot be changed later, but the objective function can be. */
 		Swarm (int dimension, double (*func_name) (std::vector< double >, void*)) : dim (dimension) {
 			swarm_size = calc_swarm_size (dim);
 			objective_func = func_name;
+
+			x_hi = DBL_MAX;
+			x_lo = DBL_MIN;
 
 			strategy_social = pso::STRATEGY_GLOBAL;
 			strategy_weight = pso::STRATEGY_W_CONST;
@@ -87,6 +109,8 @@ class Swarm {
 
 			verbose = pso::VERBOSE_OFF;
 			db_store = pso::DB_STORE_OFF;
+
+			srand (static_cast< unsigned int > (time (NULL)));
 		}
 
 		/* Setters with appropriate Exception Handling */
@@ -114,6 +138,14 @@ class Swarm {
 		}
 		void set_verbose (bool v) { verbose = v; }
 		void set_storage (bool s) { db_store = s; }
+		void set_c1c2 (double a, double b) {
+			c1 = a;
+			c2 = b;
+		}
+		void set_dim_bounds (double lo, double hi) {
+			x_lo = lo;
+			x_hi = hi;
+		}
 		/* Setters END */
 
 		/* PSO Algorithm */
@@ -131,15 +163,14 @@ class Swarm {
 					}
 				}
 
-				get_gbest (pbests, pbest_errors, gbest, gbest_err);
+				update_gbest (pbests, pbest_errors, gbest, gbest_err);
 
 				for (int i = 0; i < swarm_size; i++) {
 					for (int j = 0; j < dim; j++) {
-						double r1 (static_cast< double > (rand () / (RAND_MAX))), r2 (static_cast< double > (rand () / (RAND_MAX)));
 						velocities [i] [dim] = 
 							(inert_weight * velocities [i] [dim]) + 
-							(c1 * r1 * (pbests [i] [dim] - swarm [i] [dim]))+ 
-							(c2 * r2 * (gbest [dim] - swarm [i] [dim]));
+							(c1 * drand (0, 1) * (pbests [i] [dim] - swarm [i] [dim]))+ 
+							(c2 * drand (0, 1) * (gbest [dim] - swarm [i] [dim]));
 						swarm [i] [dim] += velocities [i] [dim];
 					}
 					update_inert_weight (inert_weight);
