@@ -24,12 +24,12 @@
 class Swarm {
 	private:
 		/* Variables for all the settings for PSO */
-		unsigned int strategy_social, strategy_weight, strategy_halt;
+		unsigned int strategy_social, strategy_weight;
 		unsigned int iter_max, no_improve, swarm_size, neighbours;
 
 		const unsigned int dim;
 		double inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo;
-		bool verbose, db_store;
+		bool verbose, db_store, halt_iter_l, halt_no_imp, halt_err_thresh;
 
 		/* Objective Function setting */
 		double (*objective_func) (std::vector< double >, void*);
@@ -67,7 +67,7 @@ class Swarm {
 			return (v);
 		}
 
-		double update_inert_weight (iter, iter_max, w_lo, w_hi) {
+		double update_inert_weight (const unsigned int& iter, const unsigned int& iter_max, const double& w_lo, const double& w_hi) {
 			int dec (3 * (iter_max / 4));
 			if (iter <= dec) {
 				return ( w_lo + ( (w_hi - w_lo) * ( static_cast< double >(dec - iter) / dec)) );
@@ -98,7 +98,6 @@ class Swarm {
 
 			strategy_social = pso::STRATEGY_GLOBAL;
 			strategy_weight = pso::STRATEGY_W_CONST;
-			strategy_halt = pso::STRATEGY_FITNESS_THRESHOLD;
 
 			iter_max = pso::DEFAULT_ITERATIONS;
 			no_improve = pso::DEFAULT_NO_IMPROVE_ITER;
@@ -109,6 +108,9 @@ class Swarm {
 
 			verbose = pso::VERBOSE_OFF;
 			db_store = pso::DB_STORE_OFF;
+			halt_iter_l = true;
+			halt_err_thresh = true;
+			halt_no_imp = false;
 
 			srand (static_cast< unsigned int > (time (NULL)));
 		}
@@ -138,7 +140,13 @@ class Swarm {
 		void set_err_thresh (double t) { err_threshold = t; }
 		void set_iter (unsigned int i) { iter_max = i; }
 		void set_no_improve_count (unsigned int c) { no_improve = c; }
-		void set_strategy_halt (unsigned int h) { strategy_halt = h; }
+
+		void set_strategy_halt (bool err_th, bool it, bool no_impr) {
+			halt_iter_l = err_th;
+			halt_err_thresh = it;
+			halt_no_imp = no_impr;
+		}
+
 		void set_swarm_size (unsigned int s) {
 			if (s <= pso::SWARM_SIZE_MAX) {
 				swarm_size = s;
@@ -161,9 +169,9 @@ class Swarm {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, DBL_MAX);
 			double gbest_err (pso::MAX_ERR);
-			unsigned int iter (0);
+			unsigned int limit (halt_iter_l == true ? iter_max : INT_MAX);
 
-			while (true) {
+			for (int iter = 0; iter < limit; iter++) {
 				for (int i = 0; i < swarm_size; i++) {
 					double err = objective_func (swarm [i], NULL);
 					if (err < pbest_errors [i]) {
@@ -183,14 +191,13 @@ class Swarm {
 					}
 				}
 
+				if (halt_err_thresh && gbest_err < err_threshold) { break; }
 				if (strategy_weight == pso::STRATEGY_W_LIN_DEC) {
 					inert_weight = update_inert_weight (iter, iter_max, w_lo, w_hi);
 				}
-				iter++;
 			}
 
-			std::vector< double > x (2);
-			return (x);
+			return (gbest);
 		}
 		/* PSO Algorithm ENDS */
 };
