@@ -23,6 +23,7 @@
 
 class Swarm {
 	private:
+		/* Variables for all the settings for PSO */
 		unsigned int strategy_social, strategy_weight, strategy_halt;
 		unsigned int iter, no_improve, swarm_size, neighbours;
 
@@ -30,6 +31,7 @@ class Swarm {
 		double inert_weight, err_threshold, c1, c2;
 		bool verbose, db_store;
 
+		/*Objective Function setting */
 		double (*objective_func) (std::vector< double >, void*);
 
 		void init (unsigned int social, unsigned int str_weight, unsigned int halt, unsigned int it, unsigned int im, unsigned int size, double weight, double thresh, double c_1, double c_2, bool verb, bool store) {
@@ -82,18 +84,40 @@ class Swarm {
 		}
 
 	public:
-		Swarm (int dimension, unsigned int social, unsigned int str_weight, unsigned int halt, unsigned int it, unsigned int im, unsigned int size, double weight, double thresh, double c_1, double c_2, bool verb, bool store) : dim (dimension) {
-			init (social, str_weight, halt, it, im, calc_swarm_size (dim), weight, thresh, c1, c2, verb, store);
-		}
-
-		Swarm (int dimension) : dim (dimension) {
+		Swarm (int dimension, double (*func_name) (std::vector< double >, void*)) : dim (dimension) {
+			swarm_size = calc_swarm_size (dim);
+			objective_func = func_name;
 			init (pso::STRATEGY_GLOBAL, pso::STRATEGY_W_CONST, pso::STRATEGY_FITNESS_THRESHOLD, pso::DEFAULT_ITERATIONS, pso::DEFAULT_NO_IMPROVE_ITER, this->calc_swarm_size (dim), pso::DEFAULT_W, pso::DEFAULT_ERR_THRESHOLD, pso::C, pso::C, pso::VERBOSE_OFF, pso::DB_STORE_OFF);
 		}
 
-		void set_objective_func (double (*func_name) (std::vector< double >, void*)) {
-			objective_func = func_name;
+		/* Setters with appropriate Exception Handling */
+		void set_objective_func (double (*func_name) (std::vector< double >, void*)) { objective_func = func_name; }
+		void set_strategy_social (unsigned int s) {
+			strategy_social = s
+			if (s == pso::STRATEGY_KNN) {
+				neighbours = static_cast< int > ( (35. / 100.) * (swarm_size) );
+			}
 		}
+		void set_knn_neighbours (unsigned int n) {
+			if (n <= swarm_size) { neighbours = n; }
+		}
+		void set_strategy_weight (int s) {
+			strategy_weight = s;
+		}
+		void set_err_thresh (double t) { err_threshold = t; }
+		void set_iter (unsigned int i) { iter = i; }
+		void set_no_improve_count (unsigned int c) { no_improve = c; }
+		void set_strategy_halt (unsigned int h) { strategy_halt = h; }
+		void set_swarm_size (unsigned int s) {
+			if (s <= pso::SWARM_SIZE_MAX) {
+				swarm_size = s;
+			}
+		}
+		void set_verbose (bool v) { verbose = v; }
+		void set_storage (bool s) { db_store = s; }
+		/* Setters END */
 
+		/* PSO Algorithm */
 		std::vector< double > find_food (void) {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, DBL_MAX);
@@ -125,4 +149,5 @@ class Swarm {
 
 			
 		}
+		/* PSO Algorithm ENDS */
 };
