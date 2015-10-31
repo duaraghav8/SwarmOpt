@@ -25,10 +25,10 @@ class Swarm {
 	private:
 		/* Variables for all the settings for PSO */
 		unsigned int strategy_social, strategy_weight, strategy_halt;
-		unsigned int iter, iter_max, no_improve, swarm_size, neighbours;
+		unsigned int iter_max, no_improve, swarm_size, neighbours;
 
 		const unsigned int dim;
-		double inert_weight, err_threshold, c1, c2, x_hi, x_lo;
+		double inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo;
 		bool verbose, db_store;
 
 		/* Objective Function setting */
@@ -46,7 +46,6 @@ class Swarm {
 		}
 
 		std::vector< std::vector< double > > init_swarm (void) const {
-			/* logic for creating and returning a swarm with random values */
 			std::vector< std::vector< double > > s (swarm_size);
 
 			for (int i = 0; i < swarm_size; i++) {
@@ -60,7 +59,6 @@ class Swarm {
 		}
 
 		std::vector< std::vector< double > > init_velocity (void) const {
-			/* logic for creating velocity vectors - initial velocity = 0.0 */
 			std::vector< std::vector< double > > v (swarm_size);
 			for (int i = 0; i < swarm_size; i++) {
 				std::vector< double > particle (dim, 0.);
@@ -69,10 +67,12 @@ class Swarm {
 			return (v);
 		}
 
-		void update_inert_weight (double& inert_weight) {
-			if (strategy_weight == pso::STRATEGY_W_LIN_DEC) {
-				/* logic for inertia weight linear decrease */
+		double update_inert_weight (iter, iter_max, w_lo, w_hi) {
+			int dec (3 * (iter_max / 4));
+			if (iter <= dec) {
+				return ( w_lo + ( (w_hi - w_lo) * ( static_cast< double >(dec - iter) / dec)) );
 			}
+			return (w_lo);
 		}
 
 		void update_gbest (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
@@ -126,6 +126,14 @@ class Swarm {
 		}
 		void set_strategy_weight (int s) {
 			strategy_weight = s;
+			if (s == pso::STRATEGY_W_LIN_DEC) {
+				inert_weight = w_hi = 0.9;
+				w_lo = 0.4;
+			}
+		}
+		void set_iw_bounds (double lo, double hi) {
+			w_hi = hi;
+			w_lo = lo;
 		}
 		void set_err_thresh (double t) { err_threshold = t; }
 		void set_iter (unsigned int i) { iter_max = i; }
@@ -153,6 +161,7 @@ class Swarm {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, DBL_MAX);
 			double gbest_err (pso::MAX_ERR);
+			unsigned int iter (0);
 
 			while (true) {
 				for (int i = 0; i < swarm_size; i++) {
@@ -164,7 +173,6 @@ class Swarm {
 				}
 
 				update_gbest (pbests, pbest_errors, gbest, gbest_err);
-
 				for (int i = 0; i < swarm_size; i++) {
 					for (int j = 0; j < dim; j++) {
 						velocities [i] [dim] = 
@@ -173,8 +181,12 @@ class Swarm {
 							(c2 * drand (0, 1) * (gbest [dim] - swarm [i] [dim]));
 						swarm [i] [dim] += velocities [i] [dim];
 					}
-					update_inert_weight (inert_weight);
 				}
+
+				if (strategy_weight == pso::STRATEGY_W_LIN_DEC) {
+					inert_weight = update_inert_weight (iter, iter_max, w_lo, w_hi);
+				}
+				iter++;
 			}
 
 			std::vector< double > x (2);
