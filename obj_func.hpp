@@ -45,6 +45,7 @@
 #include <ctime>
 #include <cfloat>
 #include <cmath>
+#include <climits>
 
 #endif
 

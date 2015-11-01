@@ -26,8 +26,8 @@ class Swarm {
 		/* Variables for all the settings for PSO */
 		unsigned int strategy_social, strategy_weight;
 		unsigned int iter_max, no_improve, swarm_size, neighbours;
-
 		const unsigned int dim;
+
 		double inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo;
 		bool verbose, db_store, halt_iter_l, halt_no_imp, halt_err_thresh;
 
@@ -78,7 +78,16 @@ class Swarm {
 		void update_gbest (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
 			switch (strategy_social) {
 				case (pso::STRATEGY_GLOBAL):
-					/* logic for Global influnce */
+					gbest_err = pbest_errors [0];
+					gbest = pbests [0];
+
+					for (int i = 1; i < swarm_size; i++) {
+						if (pbest_errors [i] < gbest_err) {
+							gbest_err = pbest_errors [i];
+							gbest = pbests [i];
+						}
+					}
+
 					break;
 				case (pso::STRATEGY_KNN):
 					/* logic for knn influence*/
@@ -88,7 +97,7 @@ class Swarm {
 		/* Functions for internal use END */
 
 	public:
-		/* The Class has only one constructor. Supplying the object with dimension and objective function is necessary, rest can be initialized to default values. Dimension supplied cannot be changed later, but the objective function can be. */
+		/* The Class has only one constructor. Supplying the object with dimension and objective function is necessary, rest initialized to default values. Every parameter except for dimension can be changed through setters. */
 		Swarm (int dimension, double (*func_name) (std::vector< double >, void*)) : dim (dimension) {
 			swarm_size = calc_swarm_size (dim);
 			objective_func = func_name;
@@ -192,6 +201,7 @@ class Swarm {
 				}
 
 				if (halt_err_thresh && gbest_err < err_threshold) { break; }
+				/* logic for no improve condition */
 				if (strategy_weight == pso::STRATEGY_W_LIN_DEC) {
 					inert_weight = update_inert_weight (iter, iter_max, w_lo, w_hi);
 				}

@@ -23,6 +23,7 @@
 #include <ctime>
 #include <cfloat>
 #include <cmath>
+#include <climits>
 
 #endif
 
@@ -52,7 +53,7 @@ namespace pso {
 	const double MAX_ERR = DBL_MAX;
 	const double DEFAULT_ERR_THRESHOLD (1e-03);
 	const unsigned int DEFAULT_ITERATIONS (5000);
-	const unsigned int DEFAULT_NO_IMPROVE_ITER (7);
+	const unsigned int DEFAULT_NO_IMPROVE_ITER (100);
 
 	const unsigned int STRATEGY_FITNESS_THRESHOLD (1);
 	const unsigned int STRATEGY_ITER_LIMIT (2);
