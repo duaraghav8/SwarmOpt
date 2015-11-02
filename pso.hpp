@@ -76,15 +76,15 @@ class Swarm {
 		}
 
 		void update_gbest_global (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
-				gbest_err = pbest_errors [0];
-				gbest = pbests [0];
+			gbest_err = pbest_errors [0];
+			gbest = pbests [0];
 
-				for (int i = 1; i < swarm_size; i++) {
-					if (pbest_errors [i] < gbest_err) {
-						gbest_err = pbest_errors [i];
-						gbest = pbests [i];
-					}
+			for (int i = 1; i < swarm_size; i++) {
+				if (pbest_errors [i] < gbest_err) {
+					gbest_err = pbest_errors [i];
+					gbest = pbests [i];
 				}
+			}
 		}
 
 		void update_gbest_knn (std::vector< std::vector< double > >& pbests, vector< double >& particle, std::vector< double >& gbest, double& gbest_err) {
