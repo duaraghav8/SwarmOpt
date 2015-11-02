@@ -9,9 +9,9 @@ SwarmOpt is a C++ based Particle Swarm Optimization Library for optimizing conti
 
 **Mentors:**
 
-	Dr. Rashmi Sharma
+	Dr. Rashmi Sharma (Department of Computer Science, UPES Dehradun)
 
-	Mr. Gunjan Chhabra
+	Mr. Gunjan Chhabra (Department of Computer Science, UPES Dehradun)
 
 
 **Features:**

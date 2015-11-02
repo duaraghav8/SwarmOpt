@@ -37,6 +37,7 @@ namespace pso {
 	*/
 	const unsigned int STRATEGY_GLOBAL (0);
 	const unsigned int STRATEGY_KNN (1);
+	const double NEIGHBOUR_FRACTION (0.35);
 
 	/*
 		Constants for Inertia Weight Configuration 

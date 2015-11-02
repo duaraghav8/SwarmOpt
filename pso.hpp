@@ -75,24 +75,20 @@ class Swarm {
 			return (w_lo);
 		}
 
-		void update_gbest (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
-			switch (strategy_social) {
-				case (pso::STRATEGY_GLOBAL):
-					gbest_err = pbest_errors [0];
-					gbest = pbests [0];
+		void update_gbest_global (std::vector< std::vector< double > >& pbests, std::vector< double >& pbest_errors, std::vector< double >& gbest, double& gbest_err) {
+				gbest_err = pbest_errors [0];
+				gbest = pbests [0];
 
-					for (int i = 1; i < swarm_size; i++) {
-						if (pbest_errors [i] < gbest_err) {
-							gbest_err = pbest_errors [i];
-							gbest = pbests [i];
-						}
+				for (int i = 1; i < swarm_size; i++) {
+					if (pbest_errors [i] < gbest_err) {
+						gbest_err = pbest_errors [i];
+						gbest = pbests [i];
 					}
+				}
+		}
 
-					break;
-				case (pso::STRATEGY_KNN):
-					/* logic for knn influence*/
-					break;
-			}
+		void update_gbest_knn (std::vector< std::vector< double > >& pbests, vector< double >& particle, std::vector< double >& gbest, double& gbest_err) {
+			/* logic for knn gbest update */
 		}
 		/* Functions for internal use END */
 
@@ -129,7 +125,7 @@ class Swarm {
 		void set_strategy_social (unsigned int s) {
 			strategy_social = s;
 			if (s == pso::STRATEGY_KNN) {
-				neighbours = static_cast< int > ( (35. / 100.) * (swarm_size) );
+				neighbours = static_cast< int > ( pso::NEIGHBOUR_FRACTION * swarm_size );
 			}
 		}
 		void set_knn_neighbours (unsigned int n) {
@@ -148,11 +144,12 @@ class Swarm {
 		}
 		void set_err_thresh (double t) { err_threshold = t; }
 		void set_iter (unsigned int i) { iter_max = i; }
+		void set_iterations (unsigned int i) { iter_max = i; }
 		void set_no_improve_count (unsigned int c) { no_improve = c; }
 
 		void set_strategy_halt (bool err_th, bool it, bool no_impr) {
-			halt_iter_l = err_th;
-			halt_err_thresh = it;
+			halt_iter_l = it;
+			halt_err_thresh = err_th;
 			halt_no_imp = no_impr;
 		}
 
@@ -189,14 +186,15 @@ class Swarm {
 					}
 				}
 
-				update_gbest (pbests, pbest_errors, gbest, gbest_err);
+				if (strategy_social == pso::STRATEGY_GLOBAL) { update_gbest_global (pbests, pbest_errors, gbest, gbest_err); }
+
 				for (int i = 0; i < swarm_size; i++) {
 					for (int j = 0; j < dim; j++) {
-						velocities [i] [dim] = 
-							(inert_weight * velocities [i] [dim]) + 
-							(c1 * drand (0, 1) * (pbests [i] [dim] - swarm [i] [dim]))+ 
-							(c2 * drand (0, 1) * (gbest [dim] - swarm [i] [dim]));
-						swarm [i] [dim] += velocities [i] [dim];
+						velocities [i] [j] = 
+							(inert_weight * velocities [i] [j]) + 
+							(c1 * drand (0, 1) * (pbests [i] [j] - swarm [i] [j]))+ 
+							(c2 * drand (0, 1) * (gbest [j] - swarm [i] [j]));
+						swarm [i] [j] += velocities [i] [j];
 					}
 				}
 
