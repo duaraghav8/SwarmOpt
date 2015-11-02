@@ -1,7 +1,9 @@
+//Test 1
+//obj_func.hpp and pso.hpp must reside in the same directory as the source file (in this case, test_1.cpp)
 #include <iostream>
 #include <algorithm>
 #include "obj_func.hpp"
-#include "pso_best.hpp"
+#include "pso.hpp"
 using namespace std;
 
 void print (double& val) { cout << val << "\t\t"; }
