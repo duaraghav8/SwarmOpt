@@ -134,8 +134,8 @@ class Swarm {
 		void set_strategy_weight (int s) {
 			strategy_weight = s;
 			if (s == pso::STRATEGY_W_LIN_DEC) {
-				inert_weight = w_hi = 0.9;
-				w_lo = 0.4;
+				inert_weight = w_hi = pso::DEFAULT_W_HI;
+				w_lo = pso::DEFAULT_W_LO;
 			}
 		}
 		void set_iw_bounds (double lo, double hi) {

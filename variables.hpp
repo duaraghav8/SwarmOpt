@@ -43,6 +43,8 @@ namespace pso {
 		Constants for Inertia Weight Configuration 
 	*/
 	const double DEFAULT_W (0.6359);
+	const double DEFAULT_W_HI (0.9);
+	const double DEFAULT_W_LO (0.4);
 	const unsigned int STRATEGY_W_CONST (0);
 	const unsigned int STRATEGY_W_LIN_DEC (1);
 
