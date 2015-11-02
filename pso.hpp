@@ -148,11 +148,12 @@ class Swarm {
 		}
 		void set_err_thresh (double t) { err_threshold = t; }
 		void set_iter (unsigned int i) { iter_max = i; }
+		void set_iterations (unsigned int i) { iter_max = i; }
 		void set_no_improve_count (unsigned int c) { no_improve = c; }
 
 		void set_strategy_halt (bool err_th, bool it, bool no_impr) {
-			halt_iter_l = err_th;
-			halt_err_thresh = it;
+			halt_iter_l = it;
+			halt_err_thresh = err_th;
 			halt_no_imp = no_impr;
 		}
 
@@ -192,11 +193,11 @@ class Swarm {
 				update_gbest (pbests, pbest_errors, gbest, gbest_err);
 				for (int i = 0; i < swarm_size; i++) {
 					for (int j = 0; j < dim; j++) {
-						velocities [i] [dim] = 
-							(inert_weight * velocities [i] [dim]) + 
-							(c1 * drand (0, 1) * (pbests [i] [dim] - swarm [i] [dim]))+ 
-							(c2 * drand (0, 1) * (gbest [dim] - swarm [i] [dim]));
-						swarm [i] [dim] += velocities [i] [dim];
+						velocities [i] [j] = 
+							(inert_weight * velocities [i] [j]) + 
+							(c1 * drand (0, 1) * (pbests [i] [j] - swarm [i] [j]))+ 
+							(c2 * drand (0, 1) * (gbest [j] - swarm [i] [j]));
+						swarm [i] [j] += velocities [i] [j];
 					}
 				}
 
