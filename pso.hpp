@@ -87,7 +87,7 @@ class Swarm {
 			}
 		}
 
-		void update_gbest_knn (std::vector< std::vector< double > >& pbests, vector< double >& particle, std::vector< double >& gbest, double& gbest_err) {
+		void update_gbest_knn (std::vector< std::vector< double > >& pbests, std::vector< double >& particle, std::vector< double >& gbest, double& gbest_err) {
 			/* logic for knn gbest update */
 		}
 		/* Functions for internal use END */
@@ -98,8 +98,8 @@ class Swarm {
 			swarm_size = calc_swarm_size (dim);
 			objective_func = func_name;
 
-			x_hi = DBL_MAX;
-			x_lo = DBL_MIN;
+			x_hi = std::numeric_limits< double >::max ();
+			x_lo = std::numeric_limits< double >::min ();
 
 			strategy_social = pso::STRATEGY_GLOBAL;
 			strategy_weight = pso::STRATEGY_W_CONST;
@@ -173,9 +173,9 @@ class Swarm {
 		/* PSO Algorithm */
 		std::vector< double > find_food (void) {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
-			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, DBL_MAX);
+			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, std::numeric_limits< double >::max ());
 			double gbest_err (pso::MAX_ERR);
-			unsigned int limit (halt_iter_l == true ? iter_max : INT_MAX);
+			unsigned int limit (halt_iter_l == true ? iter_max : std::numeric_limits< int >::max ());
 
 			for (int iter = 0; iter < limit; iter++) {
 				for (int i = 0; i < swarm_size; i++) {

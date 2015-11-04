@@ -19,11 +19,10 @@
 #define INCLUDED 1
 
 #include <vector>
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
-#include <cfloat>
 #include <cmath>
-#include <climits>
 
 #endif
 
@@ -53,7 +52,7 @@ namespace pso {
 		EXAMPLE: pso.halt_strategy = STRATEGY_FITNESS_THRESHOLD | STRATEGY_ITER_LIMIT;		
 		//loop breaks if error is small enough or N iterations have passed
 	*/
-	const double MAX_ERR = DBL_MAX;
+	const double MAX_ERR = std::numeric_limits< double >::max ();
 	const double DEFAULT_ERR_THRESHOLD (1e-03);
 	const unsigned int DEFAULT_ITERATIONS (5000);
 	const unsigned int DEFAULT_NO_IMPROVE_ITER (100);
