@@ -41,11 +41,10 @@
 #define INCLUDED 1
 
 #include <vector>
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
-#include <cfloat>
 #include <cmath>
-#include <climits>
 
 #endif
 
