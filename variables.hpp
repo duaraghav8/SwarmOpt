@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <stdexcept>
 
 #endif
 
@@ -83,4 +84,17 @@ namespace pso {
 	*/
 	const unsigned int DB_STORE_OFF (false);
 	const unsigned int DB_STORE_ON (true);
+
+	/*
+		Exception Descriptions
+	*/
+	const char *ex_strategy_social = "Bad value for Social Strategy (should be either pso::STRATEGY_GLOBAL or pso::STRATEGY_KNN)";
+	const char *ex_knn_large = "Number of neighbours cannot be larger than the Swarm Size";
+	const char *ex_knn_small = "Number of neighbours cannot be smaller than 1";
+	const char *ex_weight = "Bad value for Inertia Weight Strategy (should be either pso::STRATEGY_W_LIN_DEC or pso::STRATEGY_W_CONST)";
+	const char *ex_err_thresh = "Error Threshold cannot be negative";
+	const char *ex_iter_max = "Iteration Limit cannot be negative";
+	const char *ex_no_improve_count = "No-Improve-Count cannot be smaller than 1";
+	const char *ex_swarm_size_large = "Integer too large for Swarm Size (can be at most pso::SWARM_SIZE_MAX)";
+	const char *ex_swarm_size_small = "Integer too small for Swarm Size (must be at least 1)";
 };

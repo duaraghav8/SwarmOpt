@@ -45,6 +45,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <stdexcept>
 
 #endif
 

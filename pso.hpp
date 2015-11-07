@@ -120,50 +120,108 @@ class Swarm {
 			srand (static_cast< unsigned int > (time (NULL)));
 		}
 
-		/* Setters with appropriate Exception Handling */
+		/* Setters with appropriate Exceptions */
+
+		/* set the objective function (either an in-built or a custom) */
 		void set_objective_func (double (*func_name) (std::vector< double >, void*)) { objective_func = func_name; }
+
+		/* set social strategy, i.e., should the psychological factor be global or another topology */
 		void set_strategy_social (unsigned int s) {
+			if (s != pso::STRATEGY_GLOBAL && s != pso::STRATEGY_KNN) {
+				throw (std::invalid_argument (pso::ex_strategy_social));
+			}
+
 			strategy_social = s;
 			if (s == pso::STRATEGY_KNN) {
 				neighbours = static_cast< int > ( pso::NEIGHBOUR_FRACTION * swarm_size );
 			}
 		}
-		void set_knn_neighbours (unsigned int n) {
-			if (n <= swarm_size) { neighbours = n; }
+
+		/* If social strategy is Nearest Neighbour, how many neighbours should be considered? */
+		void set_knn_neighbours (int n) {
+			if (n < 1) {
+				throw (std::invalid_argument (pso::ex_knn_small));
+			}
+			if (n > swarm_size) {
+				throw (std::invalid_argument (pso::ex_knn_large));
+			}
+			neighbours = n;
 		}
+
+		/* Should the Inertia Weight remain constant or decrease linearly? */
 		void set_strategy_weight (int s) {
+			if (s != pso::STRATEGY_W_LIN_DEC && s != pso::STRATEGY_W_CONST) {
+				throw (std::invalid_argument (pso::ex_weight));
+			}
+
 			strategy_weight = s;
 			if (s == pso::STRATEGY_W_LIN_DEC) {
 				inert_weight = w_hi = pso::DEFAULT_W_HI;
 				w_lo = pso::DEFAULT_W_LO;
 			}
 		}
+
+		/* If Inertia Weight is to decrease linearly, then what are the lower and upper bounds (both inclusive)? */
 		void set_iw_bounds (double lo, double hi) {
 			w_hi = hi;
 			w_lo = lo;
 		}
-		void set_err_thresh (double t) { err_threshold = t; }
-		void set_iter (unsigned int i) { iter_max = i; }
-		void set_iterations (unsigned int i) { iter_max = i; }
-		void set_no_improve_count (unsigned int c) { no_improve = c; }
 
+		/* If Halt Strategy is true for error threshold, what is the value of this threshold? */
+		void set_err_thresh (double t) {
+			if (t < 0.) {
+				throw (std::invalid_argument (pso::ex_err_thresh));
+			}
+			err_threshold = t;
+		}
+
+		/* If Halt Strategy is true for iteration limit, what is the limit? */
+		void set_iterations (int i) {
+			if (i < 0) {
+				throw (std::invalid_argument (pso::ex_iter_max));
+			}
+			iter_max = i;
+		}
+
+		/* If Halt Strategy is true for No Improvement over some iterations, what is the count? */
+		void set_no_improve_count (int c) {
+			if (c < 1) {
+				throw (std::invalid_argument (pso::ex_no_improve_count));
+			}
+			no_improve = c;
+		}
+
+		/* Set the Halt strategy Parameters (error threshold, iteration limit, no improvement) */
 		void set_strategy_halt (bool err_th, bool it, bool no_impr) {
 			halt_iter_l = it;
 			halt_err_thresh = err_th;
 			halt_no_imp = no_impr;
 		}
 
-		void set_swarm_size (unsigned int s) {
-			if (s <= pso::SWARM_SIZE_MAX) {
-				swarm_size = s;
+		/* Set Swarm Size */
+		void set_swarm_size (int s) {
+			if (s < 1) {
+				throw (std::invalid_argument (pso::ex_swarm_size_small));
 			}
+			if (s > pso::SWARM_SIZE_MAX) {
+				throw (std::invalid_argument (pso::ex_swarm_size_large));
+			}
+			swarm_size = s;
 		}
+
+		/* Verbose on Standard Output? */
 		void set_verbose (bool v) { verbose = v; }
+
+		/* Database Storage? */
 		void set_storage (bool s) { db_store = s; }
+
+		/* Cognitive & Social Coefficients? */
 		void set_c1c2 (double a, double b) {
 			c1 = a;
 			c2 = b;
 		}
+
+		/* What are the boundary values for each dimension? */
 		void set_dim_bounds (double lo, double hi) {
 			x_lo = lo;
 			x_hi = hi;
