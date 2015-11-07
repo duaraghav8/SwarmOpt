@@ -97,4 +97,5 @@ namespace pso {
 	const char *ex_no_improve_count = "No-Improve-Count cannot be smaller than 1";
 	const char *ex_swarm_size_large = "Integer too large for Swarm Size (can be at most pso::SWARM_SIZE_MAX)";
 	const char *ex_swarm_size_small = "Integer too small for Swarm Size (must be at least 1)";
+	const char *ex_iw_lo_bigger = "Lower Bound of Inertia Weight Cannot be bigger than the Upper bound. usage: set_iw_bounds (lower, upper)";
 };

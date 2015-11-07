@@ -163,6 +163,9 @@ class Swarm {
 
 		/* If Inertia Weight is to decrease linearly, then what are the lower and upper bounds (both inclusive)? */
 		void set_iw_bounds (double lo, double hi) {
+			if (lo > hi) {
+				throw (std::invalid_argument (pso::ex_iw_lo_bigger));
+			}
 			w_hi = hi;
 			w_lo = lo;
 		}
