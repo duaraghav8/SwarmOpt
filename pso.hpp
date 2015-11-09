@@ -236,7 +236,7 @@ class Swarm {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, std::numeric_limits< double >::max ());
 			double gbest_err (pso::MAX_ERR);
-			unsigned int limit (halt_iter_l == true ? iter_max : std::numeric_limits< int >::max ());
+			unsigned int limit (halt_iter_l ? iter_max : std::numeric_limits< int >::max ());
 
 			for (int iter = 0; iter < limit; iter++) {
 				for (int i = 0; i < swarm_size; i++) {
@@ -256,6 +256,9 @@ class Swarm {
 							(c1 * drand (0, 1) * (pbests [i] [j] - swarm [i] [j]))+ 
 							(c2 * drand (0, 1) * (gbest [j] - swarm [i] [j]));
 						swarm [i] [j] += velocities [i] [j];
+
+						if (swarm [i] [j] > x_hi) { swarm [i] [j] = x_hi; }
+						else if (swarm [i] [j] < x_lo) { swarm [i] [j] = x_lo; }
 					}
 				}
 
