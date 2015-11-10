@@ -21,7 +21,7 @@ int main () {
 	mySwarm.set_iw_bounds (0.3, 0.9);
 
 	mySwarm.set_swarm_size (15);
-	mySwarm.set_dim_bounds (0., 50.);
+	mySwarm.set_dim_bounds (-9e6, 9e6);
 
 	best = mySwarm.find_food ();
 	for_each (best.begin (), best.end (), print);
