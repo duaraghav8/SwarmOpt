@@ -20,6 +20,7 @@
 */
 
 #include "variables.hpp"
+#include "priority_queue.hpp"
 
 class Swarm {
 	private:
@@ -35,6 +36,14 @@ class Swarm {
 		double (*objective_func) (std::vector< double >, void*);
 
 		/* Functions for internal use */
+		double euclid_dist (const std::vector< double >& x, const std::vector< double >& y) {
+			double result (0.);
+			for (int i = 0; i < x.size (); i++) {
+				result += pow (x [i] - y [i], 2.);
+			}
+			return (sqrt (result));
+		}
+
 		double drand (double lo, double hi) const {
 			double result = static_cast< double > (rand ()) / RAND_MAX;
 			return (lo + (result * (hi - lo)));
@@ -87,8 +96,22 @@ class Swarm {
 			}
 		}
 
-		void update_gbest_knn (std::vector< std::vector< double > >& pbests, std::vector< double >& particle, std::vector< double >& gbest, double& gbest_err) {
-			/* logic for knn gbest update */
+		void update_gbest_knn (const std::vector< std::vector< double > >& pbests, const std::vector< double >& pbest_err, std::vector< double >& gbest, double& gbest_err, const std::vector< double >& particle, unsigned int neighbours) {
+			pso::priority_queue pq;
+			gbest_err = pso::MAX_ERR;
+
+			for (int i = 0; i < pbests.size (); i++) {
+				pso::simple_tuple item (euclid_dist (particle, pbests [i]), i);
+				pq.push (item);
+			}
+
+			while (neighbours--) {
+				pso::simple_tuple buffer (pq.top ());
+				if (pbest_err [buffer.pos ()] < gbest_err) {
+					gbest_err = pbest_err [buffer.pos ()];
+					gbest = pbests [buffer.pos ()];
+				}
+			}
 		}
 		/* Functions for internal use END */
 
@@ -233,7 +256,7 @@ class Swarm {
 
 		/* PSO Algorithm */
 		std::vector< double > find_food (void) {
-			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm.begin (), swarm.end ());
+			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm);
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, std::numeric_limits< double >::max ());
 			double gbest_err (pso::MAX_ERR);
 			unsigned int limit (halt_iter_l ? iter_max : std::numeric_limits< int >::max ());
@@ -250,10 +273,14 @@ class Swarm {
 				if (strategy_social == pso::STRATEGY_GLOBAL) { update_gbest_global (pbests, pbest_errors, gbest, gbest_err); }
 
 				for (int i = 0; i < swarm_size; i++) {
+					if (strategy_social == pso::STRATEGY_KNN) { update_gbest_knn (pbests, pbest_errors, gbest, gbest_err, swarm [i], neighbours); }
 					for (int j = 0; j < dim; j++) {
+						/*
+							Behold! The backbone of PSO
+						*/
 						velocities [i] [j] = 
 							(inert_weight * velocities [i] [j]) + 
-							(c1 * drand (0, 1) * (pbests [i] [j] - swarm [i] [j]))+ 
+							(c1 * drand (0, 1) * (pbests [i] [j] - swarm [i] [j])) + 
 							(c2 * drand (0, 1) * (gbest [j] - swarm [i] [j]));
 						swarm [i] [j] += velocities [i] [j];
 
@@ -262,7 +289,7 @@ class Swarm {
 					}
 				}
 
-				if (halt_err_thresh && gbest_err < err_threshold) { break; }
+				if (halt_err_thresh && (gbest_err < err_threshold)) { break; }
 				/* logic for no improve condition */
 				if (strategy_weight == pso::STRATEGY_W_LIN_DEC) {
 					inert_weight = update_inert_weight (iter, iter_max, w_lo, w_hi);

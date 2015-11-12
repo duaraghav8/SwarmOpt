@@ -37,20 +37,7 @@
    }
 */
 
-#ifndef INCLUDED
-	#define INCLUDED 1
-
-	#include <vector>
-	#include <algorithm>
-	#include <cstdlib>
-	#include <ctime>
-	#include <cmath>
-	#include <stdexcept>
-
-	#ifdef __unix__
-		#include <mysql/mysql.h>
-	#endif
-#endif
+#include "includes.hpp"
 
 /*
 Sphere Function
