@@ -8,6 +8,7 @@
 	#include <ctime>
 	#include <cmath>
 	#include <stdexcept>
+	#include <string>
 
 	#ifdef __unix__
 		#include <mysql/mysql.h>

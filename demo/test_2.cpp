@@ -15,7 +15,7 @@ int main () {
 
 	vector< double > best;
 
-	mySwarm.set_strategy_social (pso::STRATEGY_GLOBAL);
+	mySwarm.set_strategy_social (pso::STRATEGY_KNN);
 	mySwarm.set_strategy_halt (true, true, false);
 	mySwarm.set_strategy_weight (pso::STRATEGY_W_LIN_DEC);
 

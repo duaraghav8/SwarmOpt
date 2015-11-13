@@ -21,6 +21,7 @@
 
 #include "variables.hpp"
 #include "priority_queue.hpp"
+#include "db_connection.hpp"
 
 class Swarm {
 	private:
@@ -31,6 +32,8 @@ class Swarm {
 
 		double inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo;
 		bool verbose, db_store, halt_iter_l, halt_no_imp, halt_err_thresh;
+
+		DBObject db_connection;
 
 		/* Objective Function setting */
 		double (*objective_func) (std::vector< double >, void*);
@@ -107,6 +110,8 @@ class Swarm {
 
 			while (neighbours--) {
 				pso::simple_tuple buffer (pq.top ());
+				pq.pop ();
+
 				if (pbest_err [buffer.pos ()] < gbest_err) {
 					gbest_err = pbest_err [buffer.pos ()];
 					gbest = pbests [buffer.pos ()];
@@ -240,6 +245,13 @@ class Swarm {
 
 		/* Database Storage? */
 		void set_storage (bool s) { db_store = s; }
+
+		/* If Database storge is ON, then ask user for details */
+		void set_db_details (const std::string username, const std::string password, const std::string dbname) {
+			db_connection.uname (username);
+			db_connection.passwd (password);
+			db_connection.dbname (dbname);
+		}
 
 		/* Cognitive & Social Coefficients? */
 		void set_c1c2 (double a, double b) {
