@@ -1,14 +1,10 @@
 /*
     First, log into your MySql Client (Command Line):
-    ```sql
         mysql -u username -p <ENTER>
         Enter Password: ***** <ENTER>
-    ```
     
     Then at the main console, type:
-    ```sql
         source path/to/create_database.sql
-    ```
 */
 
 Create Database PSO;
