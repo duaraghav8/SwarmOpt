@@ -31,6 +31,7 @@ int main () {
 	mySwarm.set_err_thresh (1e-10);
 
 	mySwarm.set_iw_bounds (0.3, 0.9);
+	mySwarm.set_verbose (pso::VERBOSE_ON);
 
 	mySwarm.set_swarm_size (15);
 	mySwarm.set_dim_bounds (-900., 900.);

@@ -22,6 +22,7 @@
 #include "variables.hpp"
 #include "priority_queue.hpp"
 #include "db_connection.hpp"
+#include "verbose.hpp"
 
 class Swarm {
 	private:
@@ -274,6 +275,12 @@ class Swarm {
 			unsigned int limit (halt_iter_l ? iter_max : std::numeric_limits< int >::max ());
 
 			for (int iter = 0; iter < limit; iter++) {
+				if (verbose) {
+					for_each (swarm.begin (), swarm.end (), pso::print_particle);
+					pso::print_border ();
+					std::cout << std::endl;
+				}
+
 				for (int i = 0; i < swarm_size; i++) {
 					double err = objective_func (swarm [i], NULL);
 					if (err < pbest_errors [i]) {

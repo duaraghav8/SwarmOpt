@@ -9,6 +9,7 @@
 	#include <cmath>
 	#include <stdexcept>
 	#include <string>
+	#include <iostream>
 
 	#ifdef __unix__
 		#include <mysql/mysql.h>
