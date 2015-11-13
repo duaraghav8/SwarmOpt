@@ -76,7 +76,7 @@ namespace pso {
 	const unsigned int DB_STORE_ON (true);
 
 	/*
-		Exception Descriptions
+		Exception Descriptions (pso.hpp)
 	*/
 	const char *ex_strategy_social = "Bad value for Social Strategy (should be either pso::STRATEGY_GLOBAL or pso::STRATEGY_KNN)";
 	const char *ex_knn_large = "Number of neighbours cannot be larger than the Swarm Size";
@@ -88,4 +88,10 @@ namespace pso {
 	const char *ex_swarm_size_large = "Integer too large for Swarm Size (can be at most pso::SWARM_SIZE_MAX)";
 	const char *ex_swarm_size_small = "Integer too small for Swarm Size (must be at least 1)";
 	const char *ex_iw_lo_bigger = "Lower Bound of Inertia Weight Cannot be bigger than the Upper bound. usage: set_iw_bounds (lower, upper)";
+
+	/*
+		Exception Descriptions (db_connection.hpp)
+	*/
+	const char *ex_db_connect_fail = "Database connection Failed";
+	const char *ex_insufficient_data = "The Credentials / Database Name has(ve) not been provided";
 };
