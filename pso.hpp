@@ -19,7 +19,6 @@
    The implementation of PSO Class and related functions goes here
 */
 
-#include "variables.hpp"
 #include "priority_queue.hpp"
 #include "db_connection.hpp"
 #include "verbose.hpp"
@@ -40,6 +39,18 @@ class Swarm {
 		double (*objective_func) (std::vector< double >, void*);
 
 		/* Functions for internal use */
+		void store_data (std::vector< double >& gbest) {
+			db_connection.push_parameters (
+				strategy_social, strategy_weight,
+				iter_max, no_improve, swarm_size, neighbours,
+				dim,
+				inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo,
+				verbose, db_store, halt_iter_l, halt_no_imp, halt_err_thresh
+			);
+			db_connection.push_result (gbest);
+			db_connection.flush ();
+		}
+
 		double euclid_dist (const std::vector< double >& x, const std::vector< double >& y) {
 			double result (0.);
 			for (int i = 0; i < x.size (); i++) {
@@ -315,6 +326,7 @@ class Swarm {
 				}
 			}
 
+			if (db_store) { store_data (gbest); }
 			return (gbest);
 		}
 		/* PSO Algorithm ENDS */

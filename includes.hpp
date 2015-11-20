@@ -4,6 +4,7 @@
 	#include <vector>
 	#include <queue>
 	#include <algorithm>
+	#include <sstream>
 	#include <cstdlib>
 	#include <ctime>
 	#include <cmath>

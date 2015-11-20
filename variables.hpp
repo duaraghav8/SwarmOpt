@@ -92,6 +92,7 @@ namespace pso {
 	/*
 		Exception Descriptions (db_connection.hpp)
 	*/
-	const char *ex_db_connect_fail = "Database connection Failed";
+	const char *ex_db_init_fail = "Database Object Initialization Failed";
+	const char *ex_db_connection_fail = "Database Connection Failed";
 	const char *ex_insufficient_data = "The Credentials / Database Name has(ve) not been provided";
 };
