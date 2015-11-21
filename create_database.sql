@@ -11,7 +11,6 @@ Create Database PSO;
 Use PSO;
 
 Create table Logs(
-	ID integer not null auto_increment,
 	Social_Strategy varchar(50),
 	Number_of_neighbours integer,
 	Inertia_Weight_Strategy varchar(50),

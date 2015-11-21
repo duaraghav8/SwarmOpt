@@ -39,7 +39,7 @@ class Swarm {
 		double (*objective_func) (std::vector< double >, void*);
 
 		/* Functions for internal use */
-		void store_data (std::vector< double >& gbest) {
+		void store_data (std::vector< double >& gbest, double error) {
 			db_connection.push_parameters (
 				strategy_social, strategy_weight,
 				iter_max, no_improve, swarm_size, neighbours,
@@ -47,8 +47,14 @@ class Swarm {
 				inert_weight, err_threshold, c1, c2, x_hi, x_lo, w_hi, w_lo,
 				verbose, db_store, halt_iter_l, halt_no_imp, halt_err_thresh
 			);
-			db_connection.push_result (gbest);
+			db_connection.push_result (gbest, error);
 			db_connection.flush ();
+		}
+
+		void display_verbose (const std::vector< std::vector< double > >& swarm) const {
+			for_each (swarm.begin (), swarm.end (), pso::print_particle);
+			pso::print_border ();
+			std::cout << std::endl; 
 		}
 
 		double euclid_dist (const std::vector< double >& x, const std::vector< double >& y) {
@@ -256,7 +262,10 @@ class Swarm {
 		void set_verbose (bool v) { verbose = v; }
 
 		/* Database Storage? */
-		void set_storage (bool s) { db_store = s; }
+		void set_storage (bool s) {
+			db_store = s;
+			if (s) { db_connection.construct (); }
+		}
 
 		/* If Database storge is ON, then ask user for details */
 		void set_db_details (const std::string username, const std::string password, const std::string dbname) {
@@ -278,7 +287,7 @@ class Swarm {
 		}
 		/* Setters END */
 
-		/* PSO Algorithm */
+		/* ***PSO ALGORITHM*** */
 		std::vector< double > find_food (void) {
 			std::vector< std::vector< double > > swarm (init_swarm ()), velocities (init_velocity ()), pbests (swarm);
 			std::vector< double > pbest_errors (swarm_size, pso::MAX_ERR), gbest (dim, std::numeric_limits< double >::max ());
@@ -286,14 +295,10 @@ class Swarm {
 			unsigned int limit (halt_iter_l ? iter_max : std::numeric_limits< int >::max ());
 
 			for (int iter = 0; iter < limit; iter++) {
-				if (verbose) {
-					for_each (swarm.begin (), swarm.end (), pso::print_particle);
-					pso::print_border ();
-					std::cout << std::endl;
-				}
+				if (verbose) { display_verbose (swarm); }
 
 				for (int i = 0; i < swarm_size; i++) {
-					double err = objective_func (swarm [i], NULL);
+					double err = objective_func (swarm [i], nullptr);
 					if (err < pbest_errors [i]) {
 						pbests [i] = swarm [i];
 						pbest_errors [i] = err;
@@ -326,7 +331,7 @@ class Swarm {
 				}
 			}
 
-			if (db_store) { store_data (gbest); }
+			if (db_store) { store_data (gbest, objective_func (gbest, nullptr)); }
 			return (gbest);
 		}
 		/* PSO Algorithm ENDS */
