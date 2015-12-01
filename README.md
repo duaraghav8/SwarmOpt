@@ -4,8 +4,7 @@ Note: Because of the Database connectivity feature, the library currently suppor
 **Team:**
 
 	Raghav Dua
-
-	Mridhul Bhambri
+	(Special thanks to Mridhul Bhambri for the Database Construction Script)
 
 
 **Mentors:**
