@@ -4,7 +4,7 @@ Note: Because of the Database connectivity feature, the library currently suppor
 **Team:**
 
 	Raghav Dua
-	(Special thanks to Mridhul Bhambri for the Database Construction Script)
+	(Special thanks to Mridhul Bhambri for the Database Construction Script & Nishchal Dua for Objective Function Implementations)
 
 
 **Mentors:**
