@@ -4,7 +4,8 @@ Note: Because of the Database connectivity feature, the library currently suppor
 **Team:**
 
 	Raghav Dua
-	(Special thanks to Mridhul Bhambri for the Database Construction Script & Nishchal Dua for Objective Function Implementations)
+	(Special thanks to Mridhul Bhambri for the Database Construction Script & User Doc and Nishchal Dua for Objective Function Implementations)
+	I have also taken inspiration from kkentzo's C-based PSO library (https://github.com/kkentzo/pso) and am grateful to him for clearing my doubts
 
 
 **Mentors:**
