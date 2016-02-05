@@ -116,7 +116,9 @@ class DBObject {
 		void flush (void) {
 			std::string query = "INSERT INTO Logs (Social_Strategy, Number_of_neighbours, Inertia_Weight_Strategy, Inertia_Weight_Const_IW, IW_Lin_Dec_upper, IW_Lin_Dec_lower, Fitness_Threshold_Exists, Fitness_Threshold, Limited_Iterations_Exists, Limited_Iterations, No_Improve_Strategy_Exists, No_Improve_Iterations, Swarm_Size, Cogni_Const, Social_Const, Final_Answer, Final_Ans_Error) values (";
 			connection = mysql_real_connect (connection, "localhost", username.c_str (), password.c_str (), db_name.c_str (), 0, nullptr, 0);
-			if (connection) { //EXCEPTION TO BE ADDED }
+			if (connection) {
+				//EXCEPTION TO BE ADDED
+			}
 			for (auto p : parameters) {
 				query += p + ", ";
 			}
