@@ -1,4 +1,7 @@
-SwarmOpt is a C++ based Particle Swarm Optimization Library for optimizing continuous single-objective functions. The library currently features 5 in-built objective functions and requires C++11 or above. Though PSO can also be used for Discrete Optimization Problems (like classification), the current version of the library doesn't support it.  
+(Fine, I'll admit. The Project Structure is pretty messed up! We made it in a bit of a rush - we believe the later we deploy, the older we are, the wiser we are. Will fix this soon:) )
+
+
+**SwarmOpt** is a ***Particle Swarm Optimization*** Library for optimizing continuous single-objective functions. The library currently features 5 in-built objective functions and requires C++11 or above. Though PSO can also be used for Discrete Optimization Problems (like classification), the current version of the library doesn't support it.  
 Note: Because of the Database connectivity feature, the library currently supports only Linux & Unix based Operating Systems.
 
 **Team:**
